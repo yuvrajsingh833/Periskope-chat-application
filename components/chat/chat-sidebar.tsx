@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { useChatStore } from '@/stores/chat-store';
-import { FiSearch, FiFilter, FiPlus, FiChevronDown, FiCheck } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiPlus, FiChevronDown, FiCheck, FiMessageCircle } from 'react-icons/fi';
 
 interface ChatSidebarProps {
   selectedChatId: string | null;

@@ -14,7 +14,13 @@ import { get, set } from 'idb-keyval';
 import { Database } from '@/lib/supabase/schema';
 import { FiPaperclip, FiSmile, FiSend, FiClock, FiCheck, FiMic, FiImage, FiPaperclip as FiAttachment } from 'react-icons/fi';
 
-type Message = Database['public']['Tables']['messages']['Row'];
+type Message = Database['public']['Tables']['messages']['Row'] & {
+  sender?: {
+    id: string;
+    display_name: string;
+    avatar_url?: string;
+  } | null;
+};
 
 interface ChatMessagesProps {
   selectedChatId: string | null;
@@ -77,9 +83,19 @@ export default function ChatMessages({ selectedChatId }: ChatMessagesProps) {
       if (error) throw error;
       
       if (data) {
-        setMessages(data);
+        const fixedData = data.map((msg) => ({
+          ...msg,
+          sender: msg.sender
+            ? {
+                ...msg.sender,
+                display_name: msg.sender.display_name ?? 'Unknown User',
+                avatar_url: msg.sender.avatar_url ?? undefined,
+              }
+            : null,
+        }));
+        setMessages(fixedData);
         // Cache in IndexedDB
-        set(`chat_messages_${selectedChatId}`, data);
+        set(`chat_messages_${selectedChatId}`, fixedData);
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -246,7 +262,7 @@ export default function ChatMessages({ selectedChatId }: ChatMessagesProps) {
           />
           <Button 
             type="submit" 
-            variant="primary" 
+            variant="default" 
             size="icon" 
             className="shrink-0 bg-green-600 text-white hover:bg-green-700"
             disabled={isSending}

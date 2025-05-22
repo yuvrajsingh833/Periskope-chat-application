@@ -63,11 +63,9 @@ export default function ChatLayout({ initialProfile, initialChats }: ChatLayoutP
     
     if (initialChats) {
       setChats(initialChats.map(chat => ({
-        id: chat.chat_id,
         ...chat.chats
       })));
       
-      // Set first chat as selected by default
       if (initialChats.length > 0 && !selectedChatId) {
         setSelectedChatId(initialChats[0].chat_id);
       }
@@ -75,7 +73,6 @@ export default function ChatLayout({ initialProfile, initialChats }: ChatLayoutP
   }, [initialProfile, initialChats, setProfile, setChats, selectedChatId]);
 
   useEffect(() => {
-    // Subscribe to new messages
     const channel = supabase
       .channel('messages')
       .on(
