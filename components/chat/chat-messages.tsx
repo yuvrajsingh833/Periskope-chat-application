@@ -52,10 +52,8 @@ export default function ChatMessages({ selectedChatId }: ChatMessagesProps) {
           setIsLoading(false);
         }
         
-        // Then fetch from Supabase to get the latest
         fetchMessages();
       }).catch(() => {
-        // If IndexedDB fails, just fetch from Supabase
         fetchMessages();
       });
     } else {
@@ -121,7 +119,6 @@ export default function ChatMessages({ selectedChatId }: ChatMessagesProps) {
       
       if (error) throw error;
       
-      // Update chat's last message
       await supabase
         .from('chats')
         .update({
@@ -139,7 +136,6 @@ export default function ChatMessages({ selectedChatId }: ChatMessagesProps) {
   };
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 

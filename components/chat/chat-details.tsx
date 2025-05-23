@@ -100,7 +100,6 @@ export default function ChatDetails({ selectedChatId }: ChatDetailsProps) {
           
           <Separator />
           
-          {/* Labels section */}
           <div>
             <div className="mb-2 flex items-center justify-between">
               <h4 className="text-sm font-medium text-muted-foreground">
@@ -141,7 +140,6 @@ export default function ChatDetails({ selectedChatId }: ChatDetailsProps) {
           
           <Separator />
           
-          {/* Photos and files section */}
           <div>
             <h4 className="mb-2 text-sm font-medium text-muted-foreground">
               Shared Files

@@ -83,14 +83,12 @@ export default function ChatLayout({ initialProfile, initialChats }: ChatLayoutP
           table: 'messages',
         },
         (payload) => {
-          // Cache message in IndexedDB
           const newMessage = payload.new as Database['public']['Tables']['messages']['Row'];
           get(`chat_messages_${newMessage.chat_id}`).then((messages) => {
             const existingMessages = messages || [];
             set(`chat_messages_${newMessage.chat_id}`, [...existingMessages, newMessage]);
           });
           
-          // Update store
           addMessage(newMessage);
         }
       )
