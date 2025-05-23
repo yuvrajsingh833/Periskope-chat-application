@@ -8,11 +8,10 @@ import { SupabaseProvider } from '@/providers/supabase-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Chat Application',
+  title: 'Periskon- A Chat Application',
   description: 'A modern chat application built with Next.js and Supabase',
 };
 
-// Add dynamic configuration
 export const dynamic = 'force-dynamic';
 
 export default function RootLayout({

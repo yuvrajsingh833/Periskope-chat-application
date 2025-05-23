@@ -1,53 +1,27 @@
-import { redirect } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase/server';
-import ChatLayout from '@/components/chat/chat-layout';
+"use client";
 
-export const dynamic = 'force-dynamic';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSupabase } from "@/providers/supabase-provider";
 
-export default async function ChatsPage() {
-  const supabase = createServerClient();
-  const { data: { session } } = await supabase.auth.getSession();
+export default function Home() {
+  const router = useRouter();
+  const { supabase } = useSupabase();
 
-  if (!session) {
-    redirect('/login');
-  }
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = "/chats";
+      } else {
+        window.location.href = "/login";
+      }
+    };
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single();
+    checkSession();
+  }, [supabase.auth, router]);
 
-  const { data: chats } = await supabase
-    .from('chat_participants')
-    .select(`
-      chat_id,
-      chats:chat_id(
-        id,
-        name,
-        is_group,
-        last_message,
-        last_message_at,
-        created_at,
-        chat_labels(
-          labels:label_id(
-            id,
-            name,
-            color
-          )
-        ),
-        chat_participants(
-          profiles:user_id(
-            id,
-            display_name,
-            avatar_url,
-            phone_number
-          )
-        )
-      )
-    `)
-    .eq('user_id', session.user.id)
-    .order('chats(last_message_at)', { ascending: false, nullsFirst: false });
-
-  return <ChatLayout initialProfile={profile} initialChats={chats} />;
+  return null;
 }
